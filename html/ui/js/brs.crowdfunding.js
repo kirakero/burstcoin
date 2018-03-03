@@ -221,12 +221,19 @@ var BRS = (function(BRS, $, undefined) {
 	    dataType: "json",
 	    data: jsonRequest,
 	    success: function(data, textStatus, jqXHR) {
-		for (var i = 0; i < atIds.length; i++) {
-		    getAT(data.numberOfBlocks, atIds[i]);
-		}
+            getAtsRateLimit(data.numberOfBlocks, atIds);
 	    }
 	});
     }
+
+    function getAtsRateLimit(numberOfBlocks, atIds) {
+		setTimeout(function () {
+			while (atIds.length) {
+				getAT(numberOfBlocks. atIds.pop());
+				getAtsRateLimit(numberOfBlocks, atIds);
+			}
+		}, 2000);
+	}
 
     function getTransaction(blockHeight, atData) {
 	var hexString = atData.machineData.substring(1 * 8, 1 * 8 + 8);
